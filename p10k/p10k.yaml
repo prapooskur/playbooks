@@ -1,5 +1,5 @@
 - name: installs powerlevel10k on the systems listed in hosts.
-  hosts: tesr 
+  hosts: all 
   tasks:
     - name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago
       become: true
