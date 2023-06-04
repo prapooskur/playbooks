@@ -31,4 +31,8 @@
       ansible.builtin.copy:
         src: ./powerconfig.zsh
         dest: ~/.p10k.zsh
+    - name: show correct colors in tmux
+      ansible.builtin.copy:
+        src: ./colortmux.conf
+        dest: ~/.tmux.conf
       
