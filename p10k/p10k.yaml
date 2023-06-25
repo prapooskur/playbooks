@@ -1,17 +1,17 @@
 - name: installs powerlevel10k on the systems listed in hosts.
   hosts: all 
   tasks:
-    - name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago
-      become: true
-      become_user: root
-      ansible.builtin.apt:
-        update_cache: yes
-        cache_valid_time: 3600
     - name: Install zsh
       become: true
       become_user: root
       ansible.builtin.package:
         name: zsh
+        state: present
+    - name: Make sure tar is installed, gitstatusd won't install without it
+      become: true
+      become_user: root
+      ansible.builtin.package:
+        name: tar
         state: present
     - name: Install git
       become: true
