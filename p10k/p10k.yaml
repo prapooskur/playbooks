@@ -23,6 +23,10 @@
       ansible.builtin.git:
         repo: https://github.com/romkatv/powerlevel10k
         dest: ~/powerlevel10k
+    - name: Clone autocomplete repo
+      ansible.builtin.git:
+        repo: https://github.com/zsh-users/zsh-autosuggestions
+        dest: ~/.zsh/zsh-autosuggestions
     - name: add .zshrc file
       ansible.builtin.copy:
         src: ./powerzshrc
@@ -35,4 +39,6 @@
       ansible.builtin.copy:
         src: ./colortmux.conf
         dest: ~/.tmux.conf
+
+
       
