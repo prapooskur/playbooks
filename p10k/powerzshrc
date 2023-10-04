@@ -35,6 +35,15 @@ alias sudo="sudo "
 bindkey '^[[H' beginning-of-line
 bindkey '^[[F' end-of-line
 
+# history settings
+HISTFILE=$HOME/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt inc_append_history       # immediately append to histfile instead of overwriting
+setopt hist_expire_dups_first   # prune duplicate commands before unique from history
+setopt hist_reduce_blanks       # remove unnecessary blanks
+setopt extended_history         # add timestamp to commands
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
