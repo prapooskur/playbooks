@@ -1,0 +1,43 @@
+# doesn't need root to run
+- name: installs atuin and sets up zsh for use on the systems listed in hosts. This assumes you're using zsh (ideally from p10k.yml).
+  hosts: all 
+  tasks:
+    - name: Ensure required packages are installed
+      package:
+        name:
+          - curl
+          - ca-certificates
+        state: present
+
+    - name: Create temporary directory for Atuin installation
+      tempfile:
+        state: directory
+        suffix: atuin
+      register: temp_dir
+
+    - name: Download Atuin installation script
+      get_url:
+        url: https://setup.atuin.sh
+        dest: "{{ temp_dir.path }}/setup.sh"
+        mode: '0755'
+
+    - name: Execute Atuin installation script
+      shell:
+        cmd: "./setup.sh"
+        chdir: "{{ temp_dir.path }}"
+      register: install_result
+      changed_when: install_result.rc == 0
+      failed_when: install_result.rc != 0
+
+    - name: Cleanup temporary directory
+      file:
+        path: "{{ temp_dir.path }}"
+        state: absent
+      when: temp_dir.path is defined
+
+    - name: Configure shell, avoid binding up arrow
+      shell: echo 'eval "$(atuin init zsh --disable-up-arrow)"' >> ~/.zshrc
+    
+
+
+      
