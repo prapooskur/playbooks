@@ -9,6 +9,8 @@
           - ca-certificates
           - zsh
         state: present
+      become: true
+      become_user: root
 
     - name: Create temporary directory for Atuin installation
       tempfile:
@@ -37,7 +39,13 @@
       when: temp_dir.path is defined
 
     - name: Configure shell, avoid binding up arrow
-      shell: echo 'eval "$(atuin init zsh --disable-up-arrow)"' >> ~/.zshrc
+      lineinfile:
+        path: "~/.zshrc"
+        regexp: '^eval "\$\(atuin init zsh.*\)"'
+        line: 'eval "$(atuin init zsh --disable-up-arrow)"'
+        state: present
+        create: yes
+        backup: yes
     
 
 

@@ -1,48 +1,12 @@
-- name: installs powerlevel10k on the systems listed in hosts.
-  hosts: all 
+- import_playbook: p10k-install.yaml
+- import_playbook: p10k-atuin.yaml
+
+# update default shell
+- name: change default shell
+  hosts: all
   tasks:
-    - name: Install zsh
-      become: true
-      become_user: root
-      ansible.builtin.package:
-        name: zsh
-        state: present
-    - name: Make sure tar is installed, gitstatusd won't install without it
-      become: true
-      become_user: root
-      ansible.builtin.package:
-        name: tar
-        state: present
-    - name: Install git
-      become: true
-      become_user: root
-      ansible.builtin.package:
-        name: git
-        state: present
-    - name: Clone repo
-      ansible.builtin.git:
-        repo: https://github.com/romkatv/powerlevel10k
-        dest: ~/powerlevel10k
-    - name: Clone autocomplete repo
-      ansible.builtin.git:
-        repo: https://github.com/zsh-users/zsh-autosuggestions
-        dest: ~/.zsh/zsh-autosuggestions
-    - name: Clone syntax highlighting repo
-      ansible.builtin.git:
-        repo: https://github.com/zsh-users/zsh-syntax-highlighting
-        dest: ~/.zsh/zsh-syntax-highlighting
-    - name: add .zshrc file
-      ansible.builtin.copy:
-        src: ./powerzshrc
-        dest: ~/.zshrc    
-    - name: add .p10k file
-      ansible.builtin.copy:
-        src: ./powerconfig.zsh
-        dest: ~/.p10k.zsh
-    - name: show correct colors in tmux
-      ansible.builtin.copy:
-        src: ./colortmux.conf
-        dest: ~/.tmux.conf
-
-
-      
+    - name: change user shell to zsh 
+      become: yes
+      user:
+        name: "{{ ansible_user_id }}"
+        shell: /bin/zsh
