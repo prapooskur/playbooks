@@ -1,5 +1,5 @@
 # doesn't need root to run
-- name: installs atuin and sets up zsh for use on the systems listed in hosts. This assumes you're using zsh (ideally from p10k.yml).
+- name: installs atuin and configures zsh to use it.
   hosts: all 
   tasks:
     - name: Ensure required packages are installed

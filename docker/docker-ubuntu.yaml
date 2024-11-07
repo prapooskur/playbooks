@@ -1,0 +1,45 @@
+- name: installs docker on an ubuntu system.
+  hosts: all
+  become: true
+  tasks:
+    - name: Set architecture specific variables
+      set_fact:
+        arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+    - name: Install required packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true  
+    - name: Add Docker repository and key
+      deb822_repository:
+        name: docker
+        types: deb
+        uris: https://download.docker.com/linux/ubuntu
+        suites: '{{  ansible_distribution_release  }}'
+        components: stable
+        architectures: '{{ arch }}'
+        signed_by: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+        enabled: true
+    - name: Install docker
+      apt:
+        pkg:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: latest
+        update_cache: true
+    - name: Give docker permissions
+      user:
+        name: '{{ ansible_user }}'
+        groups: docker
+        append: yes
